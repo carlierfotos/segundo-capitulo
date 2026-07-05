@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Comienzo De Nuestra Historia </title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffeef2 0%, #ffd6e0 100%);
+            color: #4a4a8a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+            text-align: center;
+        }
+
+        /* --- PANTALLA DE BLOQUEO OPTIMIZADA --- */
+        #pantalla-bloqueo {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #ffeef2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: opacity 0.5s ease;        
+}
+        #pantalla-bloqueo h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: #ff5d6d;
+            margin-bottom: 30px;
+        }
+        .huella-btn {
+            background-color: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+            transition: all 0.3s ease;
+            animation: pulso 1.5s infinite;
+        }
+        @keyframes pulso {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 77, 109, 0.4); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(255, 77, 109, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 77, 109, 0); }
+        }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .tarjeta {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.15);
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            z-index: 2;
+            display: none; /* Se muestra al presionar la huella */
+        }
+
+        h1 { font-family: 'Dancing Script', cursive; font-size: 3rem; color: #ff4d6d; margin-bottom: 10px; }
+        .subtitulo { font-size: 1rem; color: #777; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; }
+        
+        /* --- GALERÍA INTERACTIVA (CLICK PARA CAMBIAR) --- */
+        .contenedor-galeria {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 20px auto;
+            cursor: pointer;
+        }
+        .foto-perfil {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .contenedor-galeria:hover .foto-perfil { transform: scale(1.05) rotate(3deg); }
+        .indicador-click {
+            position: absolute;
+            bottom: 0; right: 0;
+            background: #ff4d6d;
+            color: white;
+            padding: 5px 10px;
+            font-size: 0.7rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .carta { font-size: 1.05rem; line-height: 1.6; margin-bottom: 30px; color: #555; }
+
+        /* --- BOTÓN SORPRESA INTERACTIVO --- */
+        .btn-interactivo {
+            background-color: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-interactivo:hover { background-color: #ff758f; transform: translateY(-2px); }
+
+        /* --- CONTADOR --- */
+        .contador-titulo { font-size: 0.9rem; font-weight: 600; color: #ff758f; margin-bottom: 15px; letter-spacing: 1px; }
+        .cuadricula-contador { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .bloque-tiempo { background: #fff0f3; padding: 10px 5px; border-radius: 10px; border: 1px solid #ffccd5; }
+        .numero { font-size: 1.5rem; font-weight: 600; color: #ff4d6d; display: block; }
+        .etiqueta { font-size: 0.75rem; color: #a3a3a3; text-transform: uppercase; }
+
+        /* --- CORAZONES Y EMOTICONES FLOTANTES --- */
+        .elemento-flotante {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1;
+            animation: flotar 6s linear infinite;
+            bottom: -50px;
+        }
+        @keyframes flotar {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-105vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. PANTALLA DE INICIO INTERACTIVA -->
+    <div id="pantalla-bloqueo">
+        <h2>Mantené presionado para abrir ❤️</h2>
+        <div class="huella-btn" id="boton-huella" onmousedown="iniciarAcceso()" onmouseup="cancelarAcceso()" ontouchstart="iniciarAcceso()" ontouchend="cancelarAcceso()">👆</div>
+    </div>
+
+    <!-- 2. CONTENIDO PRINCIPAL -->
+    <div class="tarjeta" id="contenido-principal">
+        <h1>Para Mi Persona Favorita ❤️</h1>
+        <p class="subtitulo">Nuestra Historia</p>
+        
+        <!-- Galería interactiva: Al hacer clic cambia de foto -->
+        <div class="contenedor-galeria" onclick="cambiarFoto()">
+            <img class="foto-perfil" id="foto-actual" src="https://unsplash.com" alt="Nosotros">
+            <span class="indicador-click">Tócame 📸</span>
+        </div>
+        
+        <div class="carta">
+            <p id="texto-carta">Holis... Quería crear este rinconcito digital para recordarte lo especial que sos para mí. Gracias por cada risa, cada mensaje y por hacer que cada día sea mejor que el anterior. ¡Te amo muchísimo! 🌹</p>
+        </div>
+
+        <!-- Botón interactivo: Lanza mensajes lindos aleatorios -->
+        <button class="btn-interactivo" onclick="mostrarSorpresa()">
+            <span>✨</span> <span>¡Tocá para una sorpresa!</span>
+        </button>
+        
+        <audio id="musica-fondo" src="https://soundhelix.com" loop></audio>
+
+        <p class="contador-titulo">TIEMPO COMPARTIDO JUNTOS:</p>
+        <div class="cuadricula-contador">
+            <div class="bloque-tiempo"><span class="numero" id="dias">00</span><span class="etiqueta">Días</span></div>
+            <div class="bloque-tiempo"><span class="numero" id="horas">00</span><span class="etiqueta">Hrs</span></div>
+            <div class="bloque-tiempo"><span class="numero" id="minutos">00</span><span class="etiqueta">Min</span></div>
+            <div class="bloque-tiempo"><span class="numero" id="segundos">00</span><span class="etiqueta">Seg</span></div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. LÓGICA DE ACCESO POR HUELLA ---
+        let tiempoPresionado;
+        function iniciarAcceso() {
+            document.getElementById('boton-huella').style.transform = 'scale(0.9)';
+            tiempoPresionado = setTimeout(() => {
+                document.getElementById('pantalla-bloqueo').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('pantalla-bloqueo').style.display = 'none';
+                    document.getElementById('contenido-principal').style.display = 'block';
+                    document.getElementById('musica-fondo').play(); // Inicia la música automáticamente al entrar
+                }, 500);
+            }, 1000); // Exige mantener presionado 1 segundo
+        }
+        function cancelarAcceso() {
+            clearTimeout(tiempoPresionado);
+            document.getElementById('boton-huella').style.transform = 'scale(1)';
+        }
+
+        // --- 2. CONFIGURACIÓN DEL CONTADOR ---
+        const fechaInicio = new Date(2025, 0, 1, 0, 0, 0); 
+        function actualizarContador() {
+            const ahora = new Date();
+            const diferencia = ahora - fechaInicio;
+            const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+            document.getElementById('dias').innerText = dias;
+            document.getElementById('horas').innerText = horas < 10 ? '0' + horas : horas;
+            document.getElementById('minutos').innerText = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('segundos').innerText = segundos < 10 ? '0' + segundos : segundos;
+        }
+        actualizarContador();
+        setInterval(actualizarContador, 1000);
+
+        // --- 3. GALERÍA DE FOTOS DINÁMICA ---
+        // Agregá acá los links de las fotos que quieras mostrar
+        const misFotos = [
+            "https://unsplash.com",
+            "https://unsplash.com",
+"unsplash.com"];
+let indiceFoto = 0;
+
+function cambiarFoto() {
+    indiceFoto = (indiceFoto + 1) % misFotos.length;
+    document.getElementById('foto-actual').src = misFotos[indiceFoto];
+    // Lanza una explosión de corazones al cambiar de foto
+    for(let i=0; i<5; i++) { 
+        setTimeout(crearElementoFlotante, i * 100); 
+    }
+}
+
+// --- 4. BOTÓN DE MENSAJES SORPRESA ---
+const frasesSorpresa = [
+    "Sos mi pensamiento favorito del día ☁️",
+    "Cada segundo con vos vale una eternidad ✨",
+    "Gracias por cruzarte en mi camino 🗺️",
+    "Tu sonrisa es mi parte favorita del mundo 🌍",
+    "¡Te amo más que ayer, pero menos que mañana! ❤️"
+];
+
+function mostrarSorpresa() {
+    const fraseAleatoria = frasesSorpresa[Math.floor(Math.random() * frasesSorpresa.length)];
+    document.getElementById('texto-carta').innerText = fraseAleatoria;
+    // Genera una lluvia masiva de emojis flotantes
+    for(let i=0; i<10; i++) {
+        setTimeout(() => crearElementoFlotante('🌸'), i * 80);
+    }
+}
+
+// --- 5. ANIMACIONES FLOTANTES GENERALES ---
+function crearElementoFlotante(emojiPersonal = '❤️') {
+    const elemento = document.createElement('div');
+    elemento.classList.add('elemento-flotante');
+    // Verifica que sea un string válido y no el evento 'click' del setInterval/addEventListener
+    elemento.innerText = (typeof emojiPersonal === 'string' && emojiPersonal !== '[object MouseEvent]') ? emojiPersonal : '❤️';
+    elemento.style.left = Math.random() * 100 + 'vw';
+    elemento.style.animationDuration = Math.random() * 3 + 3 + 's';
+    elemento.style.fontSize = Math.random() * 15 + 15 + 'px';
+    document.body.appendChild(elemento);
+    setTimeout(() => elemento.remove(), 6000);
+}
+
+setInterval(crearElementoFlotante, 500);
